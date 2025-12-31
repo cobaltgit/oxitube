@@ -2,9 +2,16 @@ use rusty_ytdl::{Video, VideoOptions, VideoQuality, VideoSearchOptions};
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::path::Path;
+use tauri::{AppHandle, Emitter};
 
 #[tauri::command]
-async fn download(url: String, quality: String, filter: String, out_file_path: String) {
+async fn download(
+    app: AppHandle,
+    url: String,
+    quality: String,
+    filter: String,
+    out_file_path: String,
+) {
     let opts = VideoOptions {
         quality: match quality.as_str() {
             "lowest" => match filter.as_str() {
@@ -46,8 +53,11 @@ async fn download(url: String, quality: String, filter: String, out_file_path: S
     while let Some(chunk) = stream.chunk().await.unwrap() {
         downloaded_bytes += file.write(&chunk).unwrap();
         progress = ((downloaded_bytes as f64 / stream_bytes as f64) * 100.0).round() as i64;
-        // update progress bar here
+        app.emit("download-progress", progress).unwrap();
+        println!("{:?}%", progress);
     }
+
+    app.emit("download-complete", ()).unwrap();
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

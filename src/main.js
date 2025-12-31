@@ -1,5 +1,18 @@
 import { invoke } from "@tauri-apps/api/core";
-import { open } from "@tauri-apps/plugin-dialog";
+import { open, message } from "@tauri-apps/plugin-dialog";
+import { listen } from "@tauri-apps/api/event";
+
+await listen("download-progress", (event) => {
+  const progress = event.payload;
+  document.getElementById("download-progress").value = progress;
+  document.getElementById("progress-percent").innerText = `${progress}%`;
+});
+
+await listen("download-complete", async () => {
+  document.getElementById("download-progress").value = 0;
+  document.getElementById("progress-percent").innerText = "";
+  await message("Download complete!", { title: "Oxitube", kind: "info" });
+});
 
 document.getElementById("download").addEventListener("submit", async (e) => {
   e.preventDefault();
