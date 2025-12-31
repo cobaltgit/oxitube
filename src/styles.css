@@ -1,1 +1,34 @@
 /* big massive todo */
+body {
+    background-color: #800020;
+    color: white;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+input[type="text"] {
+    border-radius: 5px;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 0.66lh;
+    margin: 8px 0;
+}
+
+input[type="submit"] {
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 0.66lh;
+    margin: 8px 0;
+}
+
+select {
+    padding: 6px;
+}
+
+progress {
+    border-radius: 7px;
+    margin: 1.5lh 0;
+    width: 80%;
+    height: 24px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+}

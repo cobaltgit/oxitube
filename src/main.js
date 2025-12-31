@@ -8,12 +8,10 @@ const YouTubeRegex =
 await listen("download-progress", (event) => {
   const progress = event.payload;
   document.getElementById("download-progress").value = progress;
-  document.getElementById("progress-percent").innerText = `${progress}%`;
 });
 
 await listen("download-complete", async () => {
   document.getElementById("download-progress").value = 0;
-  document.getElementById("progress-percent").innerText = "";
   await message("Download complete!", { title: "Oxitube", kind: "info" });
 });
 
@@ -40,11 +38,18 @@ document.getElementById("download").addEventListener("submit", async (e) => {
 
   if (file_path) {
     console.log("Selected directory:", file_path);
-    await invoke("download", {
-      url: url,
-      quality: quality,
-      filter: filter,
-      outFilePath: file_path,
-    });
+    try {
+      await invoke("download", {
+        url: url,
+        quality: quality,
+        filter: filter,
+        outFilePath: file_path,
+      });
+    } catch (error) {
+      await message(error, {
+        title: "Error",
+        kind: "error",
+      });
+    }
   }
 });
