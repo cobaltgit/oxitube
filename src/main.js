@@ -6,7 +6,6 @@ const YouTubeRegex =
   /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/;
 
 (async () => {
-  // Set up event listeners
   await listen("download-progress", (event) => {
     const progress = event.payload;
     document.getElementById("download-progress").value = progress;
@@ -21,6 +20,7 @@ const YouTubeRegex =
 
   document.getElementById("download").addEventListener("submit", async (e) => {
     e.preventDefault();
+    document.getElementById("download-progress").value = 0;
 
     const formData = new FormData(e.target);
     const url = formData.get("url");
@@ -41,10 +41,6 @@ const YouTubeRegex =
     });
 
     if (file_path) {
-      console.log("Selected directory:", file_path);
-
-      document.getElementById("download-progress").value = 0;
-
       try {
         await invoke("download", {
           url: url,
